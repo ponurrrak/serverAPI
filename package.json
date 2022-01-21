@@ -1,0 +1,18 @@
+{
+  "name": "serverAPI",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:ponurrrak/serverAPI.git",
+  "author": "Maciek Mielczarek <maciejka-67@o2.pl>",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "scripts": {
+    "start": "nodemon server.js"
+  }
+}
