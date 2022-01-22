@@ -23,8 +23,8 @@ router.route('/concerts').post((req, res, next) => {
       id,
       performer,
       genre,
-      price,
-      day,
+      price: price * 1,
+      day: day * 1,
       image,
     };
     concerts.push(newConcert);
@@ -36,17 +36,17 @@ router.route('/concerts').post((req, res, next) => {
 
 router.route('/concerts/:id').put((req, res, next) => {
   const requestedId = req.params.id * 1;
-  const requestedIdIndex = concerts.findIndex(item => item.id === requestedId);   
+  const requestedIdIndex = concerts.findIndex(item => item.id === requestedId);
   const { performer, genre, price, day, image } = req.body;
-  if(requestedIdIndex !== -1 && performer && genre && price && day && image) {    
+  if(requestedIdIndex !== -1 && performer && genre && price && day && image) {
     concerts.splice(requestedIdIndex, 1, {
       id: requestedId,
       performer,
       genre,
-      price,
-      day,
+      price: price * 1,
+      day: day * 1,
       image,
-    });    
+    });
     res.json({ message: 'OK' });
   } else if(requestedIdIndex !== -1) {
     res.status(400).json({message: 'Bad request'});
@@ -57,7 +57,7 @@ router.route('/concerts/:id').put((req, res, next) => {
 
 router.route('/concerts/:id').delete((req, res, next) => {
   const requestedId = req.params.id * 1;
-  const requestedIdIndex = concerts.findIndex(item => item.id === requestedId);   
+  const requestedIdIndex = concerts.findIndex(item => item.id === requestedId);
   if(requestedIdIndex !== -1) {
     concerts.splice(requestedIdIndex, 1);
     res.json({ message: 'OK' });
