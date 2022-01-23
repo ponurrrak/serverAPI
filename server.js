@@ -7,7 +7,15 @@ const seatsRoutes = require('./routes/seats.routes.js');
 
 const app = express();
 
-app.use(cors());
+if(process.env.NODE_ENV !== 'production') {
+  const corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200,
+  };
+  app.options('*', cors());
+  app.use(cors(corsOptions));
+}
+
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

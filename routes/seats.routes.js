@@ -61,7 +61,7 @@ router.route('/seats/:id').put((req, res, next) => {
   } else if(requestedIdIndex !== -1 && !isBooked) {
     res.status(400).json({message: 'Bad request'});
   } else if(isBooked) {
-    res.status(409).json({message: 'The slot is already taken...'});
+    res.status(409).json({message: 'The seat is already taken...'});
   } else {
     next();
   }
