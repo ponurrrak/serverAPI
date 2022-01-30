@@ -1,4 +1,5 @@
 import React from 'react';
+import io from 'socket.io-client';
 import { Button, Progress, Alert } from 'reactstrap';
 
 import './SeatChooser.scss';
@@ -6,13 +7,20 @@ import './SeatChooser.scss';
 class SeatChooser extends React.Component {
 
   componentDidMount() {
-    const { loadSeats } = this.props;
+    const { loadSeats, updateSeats } = this.props;
     loadSeats();
-    this.timer = setInterval(loadSeats, 2 * 60 * 1000);
+    if(process.env.NODE_ENV === 'production') {
+      this.socket = io();
+    } else {
+      this.socket = io('http://localhost:8000');
+    }
+    this.socket.on('seatsUpdated', seats => {
+      updateSeats(seats);
+    });
   }
 
   componentWillUnmount() {
-    clearInterval(this.timer);
+    this.socket.disconnect();
   }
 
   isTaken = (seatId) => {
@@ -33,19 +41,22 @@ class SeatChooser extends React.Component {
   render() {
 
     const { prepareSeat } = this;
-    const { requests } = this.props;
+    const { requests, seats, chosenDay } = this.props;
 
     return (
       <div>
         <h3>Pick a seat</h3>
         <small id="pickHelp" className="form-text text-muted ml-2"><Button color="secondary" /> – seat is already taken</small>
-        <small id="pickHelpTwo" className="form-text text-muted ml-2 mb-4"><Button outline color="primary" /> – it's empty</small>
-        { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].success) && <div className="seats">{[...Array(50)].map((x, i) => prepareSeat(i+1) )}</div>}
+        <small id="pickHelpTwo" className="form-text text-muted ml-2 mb-4"><Button outline color="primary" /> – it&apos;s empty</small>
+        { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].success) && <div className="seats">
+          {[...Array(50)].map((x, i) => prepareSeat(i+1) )}
+          <p>{`Free seats: ${50 - seats.filter(item => item.day === chosenDay).length}/50`}</p>
+        </div>}
         { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].pending) && <Progress animated color="primary" value={50} /> }
-        { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].error) && <Alert color="warning">Couldn't load seats...</Alert> }
+        { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].error) && <Alert color="warning">Couldn&apos;t load seats...</Alert> }
       </div>
-    )
-  };
+    );
+  }
 }
 
 export default SeatChooser;

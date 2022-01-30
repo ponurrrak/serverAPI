@@ -20,7 +20,7 @@ const items = [
     altText: 'Meet stars!',
     caption: 'Meet the biggest music starts live!',
     header: 'Meet stars!',
-  }
+  },
 ];
 
 const PromoCarousel = () => <UncontrolledCarousel className="promoCarousel" items={items} />;

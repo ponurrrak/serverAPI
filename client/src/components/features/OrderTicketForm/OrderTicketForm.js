@@ -37,15 +37,14 @@ class OrderTicketForm extends React.Component {
     this.setState({ order: { ...order, [name]: parseInt(value) }});
   }
 
-  submitForm = async (e) => {
+  submitForm = (e) => {
     const { order } = this.state;
-    const { addSeat, loadSeats } = this.props;
+    const { addSeat } = this.props;
 
     e.preventDefault();
 
     if(order.client && order.email && order.day && order.seat) {
-      await addSeat(order);
-      loadSeats();
+      addSeat(order);      
       this.setState({
         order: {
           client: '',
@@ -72,7 +71,7 @@ class OrderTicketForm extends React.Component {
           <Col xs="12" md="6">
             { (isError) && <Alert color="warning">There are some errors in you form. Have you fill all the fields? Maybe you forgot to choose your seat?</Alert> }
             { (requests['ADD_SEAT'] && requests['ADD_SEAT'].error && !isError) && <Alert color="danger">{requests['ADD_SEAT'].error}</Alert> }
-            { (requests['ADD_SEAT'] && requests['ADD_SEAT'].success && !isError) && <Alert color="success">You've booked your ticket! Check you email in order to make a payment.</Alert> }
+            { (requests['ADD_SEAT'] && requests['ADD_SEAT'].success && !isError) && <Alert color="success">You&apos;ve booked your ticket! Check you email in order to make a payment.</Alert> }
             { (requests['ADD_SEAT'] && requests['ADD_SEAT'].pending) && <Progress animated className="mb-5" color="primary" value={75} /> }
             <FormGroup>
               <Label for="clientEmail">Name</Label>
@@ -106,8 +105,8 @@ class OrderTicketForm extends React.Component {
           </Col>
         </Row>
       </Form>
-    )
-  };
+    );
+  }
 }
 
 export default OrderTicketForm;

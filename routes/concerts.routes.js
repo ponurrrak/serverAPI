@@ -15,7 +15,7 @@ router.route('/concerts/:id').get((req, res, next) => {
   concertFound ? res.json(concertFound) : next();
 });
 
-router.route('/concerts').post((req, res, next) => {
+router.route('/concerts').post((req, res) => {
   const { performer, genre, price, day, image } = req.body;
   if(performer && genre && price && day && image) {
     const id = Math.max(...concerts.map(item => item.id), 0) + 1;

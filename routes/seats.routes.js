@@ -15,7 +15,7 @@ router.route('/seats/:id').get((req, res, next) => {
   seatFound ? res.json(seatFound) : next();
 });
 
-router.route('/seats').post((req, res, next) => {
+router.route('/seats').post((req, res) => {
   const { client, email } = req.body;
   const seat = req.body.seat * 1;
   const day = req.body.day * 1;
@@ -29,9 +29,10 @@ router.route('/seats').post((req, res, next) => {
       day,
       seat,
       client,
-      email
+      email,
     };
     seats.push(newSeat);
+    req.io.emit('seatsUpdated', seats);
     res.json({ message: 'OK' });
   } else if(!isBooked) {
     res.status(400).json({message: 'Bad request'});

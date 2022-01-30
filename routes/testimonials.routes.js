@@ -15,7 +15,7 @@ router.route('/testimonials/:id').get((req, res, next) => {
   testimonialFound ? res.json(testimonialFound) : next();
 });
 
-router.route('/testimonials').post((req, res, next) => {
+router.route('/testimonials').post((req, res) => {
   const { author, text } = req.body;
   if(author && text) {
     const id = Math.max(...testimonials.map(item => item.id), 0) + 1;
@@ -33,14 +33,14 @@ router.route('/testimonials').post((req, res, next) => {
 
 router.route('/testimonials/:id').put((req, res, next) => {
   const requestedId = req.params.id * 1;
-  const requestedIdIndex = testimonials.findIndex(item => item.id === requestedId);  
+  const requestedIdIndex = testimonials.findIndex(item => item.id === requestedId);
   const { author, text } = req.body;
-  if(requestedIdIndex !== -1 && author && text) {    
+  if(requestedIdIndex !== -1 && author && text) {
     testimonials.splice(requestedIdIndex, 1, {
       id: requestedId,
       author,
       text,
-    });        
+    });
     res.json({ message: 'OK' });
   } else if(requestedIdIndex !== -1) {
     res.status(400).json({message: 'Bad request'});
@@ -51,7 +51,7 @@ router.route('/testimonials/:id').put((req, res, next) => {
 
 router.route('/testimonials/:id').delete((req, res, next) => {
   const requestedId = req.params.id * 1;
-  const requestedIdIndex = testimonials.findIndex(item => item.id === requestedId);  
+  const requestedIdIndex = testimonials.findIndex(item => item.id === requestedId);
   if(requestedIdIndex !== -1) {
     testimonials.splice(requestedIdIndex, 1);
     res.json({ message: 'OK' });

@@ -16,16 +16,16 @@ if(window.__REDUX_DEVTOOLS_EXTENSION__){
   store = createStore(
     rootReducer,
     compose(
-  		applyMiddleware(thunk),
-  		window.__REDUX_DEVTOOLS_EXTENSION__()
-  	)
+      applyMiddleware(thunk),
+      window.__REDUX_DEVTOOLS_EXTENSION__()
+    )
   );
 } else {
   store = createStore(
     rootReducer,
     compose(
-  		applyMiddleware(thunk)
-  	)
+      applyMiddleware(thunk)
+    )
   );
 }
 

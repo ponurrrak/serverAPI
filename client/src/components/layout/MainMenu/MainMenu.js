@@ -12,12 +12,12 @@ import {
 class MainMenu extends React.Component {
 
   state = {
-    isOpen: false
+    isOpen: false,
   };
 
   toggle = () => {
     this.setState({
-      isOpen: !this.state.isOpen
+      isOpen: !this.state.isOpen,
     });
   }
 

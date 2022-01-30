@@ -1,24 +1,43 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const socket = require('socket.io');
 const testimonialsRoutes = require('./routes/testimonials.routes.js');
 const concertsRoutes = require('./routes/concerts.routes.js');
 const seatsRoutes = require('./routes/seats.routes.js');
 
 const app = express();
+const port = process.env.PORT || 8000;
+
+const server = app.listen(port, () => {
+  console.log('Server is running on port: ' + port);
+});
+
+const io = socket(server);
+
+io.on('connection', socket => {
+  console.log('New socket: id ' + socket.id);
+});
 
 if(process.env.NODE_ENV !== 'production') {
   const corsOptions = {
     origin: 'http://localhost:3000',
     optionsSuccessStatus: 200,
   };
-  app.options('*', cors());
+  app.options('*', cors(corsOptions));
   app.use(cors(corsOptions));
 }
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use('/api', (req, res, next) => {
+  if(req.method === 'POST' && req.url === '/seats') {
+    req.io = io;
+  }  
+  next();
+});
 
 app.use('/api', testimonialsRoutes);
 app.use('/api', concertsRoutes);
@@ -46,9 +65,4 @@ app.use((req, res) => {
     default:
       res.status(405).json({message: 'Method Not Allowed'});
   }
-});
-
-const port = process.env.PORT || 8000;
-app.listen(port, () => {
-  console.log('Server is running on port: ' + port);
 });
