@@ -2,12 +2,21 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const socket = require('socket.io');
+const mongoose = require('mongoose');
 const testimonialsRoutes = require('./routes/testimonials.routes.js');
 const concertsRoutes = require('./routes/concerts.routes.js');
 const seatsRoutes = require('./routes/seats.routes.js');
 
 const app = express();
 const port = process.env.PORT || 8000;
+
+mongoose.connect('mongodb://localhost:27017/NewWaveDB', { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+
+db.once('open', () => {
+  console.log('Connected to the database');
+});
+db.on('error', err => console.log('Error ' + err));
 
 const server = app.listen(port, () => {
   console.log('Server is running on port: ' + port);
@@ -35,13 +44,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api', (req, res, next) => {
   if(req.method === 'POST' && req.url === '/seats') {
     req.io = io;
-  }  
+  }
   next();
 });
 
-app.use('/api', testimonialsRoutes);
-app.use('/api', concertsRoutes);
-app.use('/api', seatsRoutes);
+app.use('/api/testimonials', testimonialsRoutes);
+app.use('/api/concerts', concertsRoutes);
+app.use('/api/seats', seatsRoutes);
 
 app.use('/api', (req, res, next) => {
   if(req.method === 'GET') {
