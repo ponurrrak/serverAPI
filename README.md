@@ -1,2 +1,2 @@
 # serverAPI
-## https://salty-shelf-53586.herokuapp.com/order-a-ticket
+## https://salty-shelf-53586.herokuapp.com

@@ -6,11 +6,11 @@ const mongoose = require('mongoose');
 const testimonialsRoutes = require('./routes/testimonials.routes.js');
 const concertsRoutes = require('./routes/concerts.routes.js');
 const seatsRoutes = require('./routes/seats.routes.js');
+const config = require('./config');
 
 const app = express();
-const port = process.env.PORT || 8000;
 
-mongoose.connect('mongodb://localhost:27017/NewWaveDB', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
 db.once('open', () => {
@@ -18,8 +18,8 @@ db.once('open', () => {
 });
 db.on('error', err => console.log('Error ' + err));
 
-const server = app.listen(port, () => {
-  console.log('Server is running on port: ' + port);
+const server = app.listen(config.apiPort, () => {
+  console.log('Server is running on port: ' + config.apiPort);
 });
 
 const io = socket(server);
