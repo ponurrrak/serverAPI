@@ -20,7 +20,7 @@
       z-index: 2;
       position: relative;
     }
-  
+
   }
 
   &__info {
@@ -52,17 +52,24 @@
       bottom: 1rem;
       left: 1.5rem;
     }
-  
+
+    &__tickets {
+      opacity: 0.8;
+      font-size: 0.9rem;
+      position: absolute;
+      bottom: 3rem;      
+    }
+
   }
 
   &:nth-of-type(2n) .row {
 
     color: $color-text-bright;
-  
+
     > div:first-child {
       order: 2;
     }
-  
+
     > div:second-child {
       order: 1;
     }

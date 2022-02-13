@@ -34,6 +34,12 @@
     },
     "globals": {
         "process": "readonly",
-        "__dirname": "readonly"
+        "__dirname": "readonly",
+        "describe": "readonly",
+        "it": "readonly",
+        "after": "readonly",
+        "before": "readonly",
+        "beforeEach": "readonly",
+        "afterEach": "readonly"    
     }
 }

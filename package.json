@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:ponurrrak/serverAPI.git",
-  "author": "Maciek Mielczarek <maciejka-67@o2.pl>",
+  "author": "ponurrrak",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
@@ -14,6 +14,14 @@
   },
   "scripts": {
     "start": "nodemon server.js",
-    "build": "cd client && yarn install && yarn build"
+    "build": "cd client && yarn install && yarn build",
+    "test": "NODE_ENV=test mocha \"./{,!(node_modules|client)/**/}*.test.js\"",
+    "test:watch": "onchange \"./**/*.js\" -i -k -- yarn test"
+  },
+  "devDependencies": {
+    "chai": "4.2.0",
+    "chai-http": "4.3.0",
+    "mocha": "6.2.1",
+    "onchange": "6.1.0"
   }
 }

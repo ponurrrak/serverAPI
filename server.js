@@ -14,18 +14,24 @@ mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: t
 const db = mongoose.connection;
 
 db.once('open', () => {
-  console.log('Connected to the database');
+  if(process.env.NODE_ENV !== 'test') {
+    console.log('Connected to the database');
+  }
 });
 db.on('error', err => console.log('Error ' + err));
 
 const server = app.listen(config.apiPort, () => {
-  console.log('Server is running on port: ' + config.apiPort);
+  if(process.env.NODE_ENV !== 'test') {
+    console.log('Server is running on port: ' + config.apiPort);
+  }
 });
 
 const io = socket(server);
 
 io.on('connection', socket => {
-  console.log('New socket: id ' + socket.id);
+  if(process.env.NODE_ENV !== 'test') {
+    console.log('New socket: id ' + socket.id);
+  }
 });
 
 if(process.env.NODE_ENV !== 'production') {
@@ -75,3 +81,5 @@ app.use((req, res) => {
       res.status(405).json({message: 'Method Not Allowed'});
   }
 });
+
+module.exports = server;
