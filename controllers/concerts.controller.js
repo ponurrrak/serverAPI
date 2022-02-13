@@ -2,17 +2,20 @@ const ObjectId = require('mongodb').ObjectId;
 const Concert = require('../models/concert.model');
 const Seat = require('../models/seat.model');
 
-const addTickets = (concert, seats) => {
-  const seatsTaken = seats.filter(seat => concert.day === seat.day);
-  const tickets = 50 - seatsTaken.length;  
+const addTickets = async concert => {
+  const seatsTaken = await Seat.find({ day: concert.day });
+  const tickets = 50 - seatsTaken.length;
   return {...concert._doc, tickets};
 };
 
 exports.getAll = async (req, res) => {
   try {
     const concerts = await Concert.find();
-    const seats = await Seat.find();
-    res.json(concerts.map(concert => addTickets(concert, seats)));
+    const concertsExtended = [];
+    for(const concert of concerts) {
+      concertsExtended.push(await addTickets(concert));
+    }
+    res.json(concertsExtended);
   } catch(err) {
     res.status(500).json({message: err});
   }
@@ -23,9 +26,8 @@ exports.getRandom = async (req, res, next) => {
     const count = await Concert.countDocuments();
     const randNum = Math.floor(Math.random() * count);
     const randItem = await Concert.findOne().skip(randNum);
-    const seats = await Seat.find();
     if(randItem) {
-      res.json(addTickets(randItem, seats));
+      res.json(await addTickets(randItem));
     } else {
       next();
     }
@@ -40,9 +42,8 @@ exports.getById = async (req, res, next) => {
     if(ObjectId.isValid(req.params.id)) {
       itemFound = await Concert.findById(req.params.id);
     }
-    if(itemFound) {
-      const seats = await Seat.find();
-      res.json(addTickets(itemFound, seats));
+    if(itemFound) {      
+      res.json(await addTickets(itemFound));
     } else {
       next();
     }
