@@ -8,9 +8,11 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "4.17.1",
-    "mongoose": "5.7.1",
+    "helmet": "3.21.1",
+    "mongo-sanitize": "1.0.1",
+    "mongoose": "5.13.9",
     "nodemon": "^2.0.15",
-    "socket.io": "2.2.0"
+    "socket.io": "3.1.0"
   },
   "scripts": {
     "start": "nodemon server.js",
@@ -22,6 +24,7 @@
     "chai": "4.2.0",
     "chai-http": "4.3.0",
     "mocha": "6.2.1",
-    "onchange": "6.1.0"
+    "onchange": "6.1.0",
+    "snyk": "^1.854.0"
   }
 }

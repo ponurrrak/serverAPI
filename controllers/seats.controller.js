@@ -1,4 +1,5 @@
 const ObjectId = require('mongodb').ObjectId;
+const sanitize = require('mongo-sanitize');
 const Seat = require('../models/seat.model');
 
 exports.getAll = async (req, res) => {
@@ -41,9 +42,10 @@ exports.getById = async (req, res, next) => {
 };
 
 exports.postNewItem = async (req, res) => {
-  const { client, email } = req.body;
-  const seat = Number(req.body.seat);
-  const day = Number(req.body.day);
+  const client = sanitize(req.body.client);
+  const email = sanitize(req.body.email);  
+  const seat = Number(sanitize(req.body.seat));
+  const day = Number(sanitize(req.body.day));
   try {
     const isBooked = await Seat.findOne({ seat, day });
     if(!isBooked) {

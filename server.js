@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const helmet = require('helmet');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
 const testimonialsRoutes = require('./routes/testimonials.routes.js');
@@ -42,7 +43,7 @@ if(process.env.NODE_ENV !== 'production') {
   app.options('*', cors(corsOptions));
   app.use(cors(corsOptions));
 }
-
+app.use(helmet());
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

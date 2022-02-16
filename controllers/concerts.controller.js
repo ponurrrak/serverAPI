@@ -5,16 +5,13 @@ const Seat = require('../models/seat.model');
 const addTickets = async concert => {
   const seatsTaken = await Seat.find({ day: concert.day });
   const tickets = 50 - seatsTaken.length;
-  return {...concert._doc, tickets};
+  return {...concert.toObject(), tickets};
 };
 
 exports.getAll = async (req, res) => {
   try {
     const concerts = await Concert.find();
-    const concertsExtended = [];
-    for(const concert of concerts) {
-      concertsExtended.push(await addTickets(concert));
-    }
+    const concertsExtended = await Promise.all(concerts.map(concert => addTickets(concert)));    
     res.json(concertsExtended);
   } catch(err) {
     res.status(500).json({message: err});
@@ -42,7 +39,7 @@ exports.getById = async (req, res, next) => {
     if(ObjectId.isValid(req.params.id)) {
       itemFound = await Concert.findById(req.params.id);
     }
-    if(itemFound) {      
+    if(itemFound) {
       res.json(await addTickets(itemFound));
     } else {
       next();
